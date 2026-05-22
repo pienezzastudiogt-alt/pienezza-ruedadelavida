@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pienezza · Rueda de la Vida</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:#F7F2EA;--warm:#EDE4D6;--taupe:#C8B89E;--deep:#7A5C44;
+  --espresso:#3D2414;--gold:#B89460;--rose:#C97A6E;--ink:#1E1410;--muted:#8C7A6B;
+  --purple:#8B7DD8;--purple-light:#EAE7F8;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;overflow-x:hidden;}
+
+.hero{background:var(--espresso);padding:3.5rem 2rem 2.5rem;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 15% 85%,rgba(184,148,96,.2) 0%,transparent 55%),radial-gradient(ellipse 50% 60% at 85% 15%,rgba(139,125,216,.15) 0%,transparent 55%);}
+.hero-orn{width:1px;height:44px;background:var(--gold);margin:0 auto 1.2rem;opacity:.5;position:relative;}
+.hero-brand{font-size:10px;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--taupe);margin-bottom:.8rem;position:relative;}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(34px,7vw,62px);font-weight:300;letter-spacing:.1em;color:var(--cream);line-height:1.1;margin-bottom:.8rem;position:relative;}
+.hero-title em{font-style:italic;color:var(--gold);}
+.hero-sub{font-size:13px;font-weight:300;color:rgba(247,242,234,.6);max-width:500px;margin:0 auto 1.5rem;line-height:1.7;position:relative;}
+.hero-rule{font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;color:rgba(247,242,234,.4);position:relative;}
+
+.intro-wrap{max-width:720px;margin:0 auto;padding:2.5rem 1.5rem 1rem;}
+.sec-label{font-size:10px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);padding-bottom:8px;border-bottom:.5px solid var(--warm);margin-bottom:1.2rem;}
+.rules-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:1.2rem;}
+.rule-card{background:#fff;border:.5px solid var(--warm);border-radius:4px;padding:.9rem 1rem;}
+.rule-n{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--taupe);line-height:1;margin-bottom:4px;}
+.rule-t{font-size:11px;color:var(--muted);line-height:1.5;}
+.warn-box{background:var(--purple-light);border:.5px solid #C5BFF0;border-radius:4px;padding:10px 14px;font-size:12px;color:#4A3D8A;line-height:1.7;margin-bottom:1.5rem;}
+
+.app{max-width:960px;margin:0 auto;padding:0 1.5rem 4rem;}
+
+/* STEPS NAV */
+.steps{display:flex;align-items:center;gap:0;margin-bottom:2rem;overflow-x:auto;padding-bottom:4px;}
+.step{display:flex;align-items:center;gap:7px;}
+.sdot{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;transition:all .3s;flex-shrink:0;}
+.sdot.active{background:var(--espresso);color:var(--cream);}
+.sdot.done{background:var(--gold);color:#fff;}
+.sdot.pending{background:var(--warm);color:var(--muted);}
+.slbl{font-size:11px;font-weight:500;color:var(--muted);white-space:nowrap;}
+.slbl.active{color:var(--espresso);font-weight:600;}
+.sline{flex:1;height:1px;background:var(--warm);margin:0 6px;min-width:16px;}
+
+.panel{display:none;} .panel.active{display:block;}
+
+/* STEP 1 */
+.intro-txt{font-family:'Cormorant Garamond',serif;font-size:19px;font-style:italic;font-weight:300;color:var(--deep);margin-bottom:1.2rem;line-height:1.5;}
+.count-note{font-size:12px;color:var(--muted);margin-bottom:1rem;} .count-note span{color:var(--espresso);font-weight:600;}
+.areas-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;margin-bottom:1.2rem;}
+.area-item{background:#fff;border:1px solid var(--warm);border-radius:4px;padding:9px 12px;display:flex;align-items:center;gap:9px;cursor:pointer;transition:all .2s;}
+.area-item:hover{border-color:var(--gold);}
+.area-item.sel{border-color:var(--purple);background:var(--purple-light);}
+.acheck{width:16px;height:16px;border:1.5px solid var(--warm);border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;transition:all .2s;}
+.area-item.sel .acheck{background:var(--purple);border-color:var(--purple);color:#fff;}
+.aname{font-size:12px;color:var(--ink);}
+.custom-row{display:flex;gap:8px;margin-bottom:1.5rem;}
+.cinput{flex:1;border:1px solid var(--warm);border-radius:4px;padding:9px 13px;font-family:'Outfit',sans-serif;font-size:13px;color:var(--ink);background:#fff;outline:none;transition:border-color .2s;}
+.cinput:focus{border-color:var(--gold);}
+.cbtn{background:var(--espresso);color:var(--cream);border:none;border-radius:4px;padding:9px 18px;font-family:'Outfit',sans-serif;font-size:12px;font-weight:500;cursor:pointer;white-space:nowrap;}
+
+/* STEP 2 — RATING EACH AREA */
+.rating-intro{font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:var(--deep);margin-bottom:1.5rem;line-height:1.5;}
+.area-rating-card{background:#fff;border:.5px solid var(--warm);border-radius:6px;padding:1.2rem 1.4rem;margin-bottom:10px;}
+.arc-title{font-size:14px;font-weight:500;color:var(--espresso);margin-bottom:1rem;}
+.slider-row{margin-bottom:.8rem;}
+.slider-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
+.slider-name{font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;}
+.slider-val{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;color:var(--purple);}
+.slider-val.actual{color:var(--rose);}
+.slider-hint{font-size:10px;color:var(--taupe);margin-top:2px;}
+input[type=range]{width:100%;-webkit-appearance:none;appearance:none;height:3px;border-radius:2px;outline:none;cursor:pointer;}
+input[type=range].meta-slider{background:linear-gradient(to right,var(--purple) 0%,var(--purple) var(--v,50%),var(--warm) var(--v,50%),var(--warm) 100%);}
+input[type=range].actual-slider{background:linear-gradient(to right,var(--rose) 0%,var(--rose) var(--v,30%),var(--warm) var(--v,30%),var(--warm) 100%);}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:var(--espresso);cursor:pointer;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+
+/* ENERGY */
+.energy-row{margin-top:.8rem;}
+.energy-label-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.energy-title{font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;}
+.energy-chosen{font-size:12px;font-weight:500;color:var(--espresso);}
+.energy-colors{display:flex;gap:6px;flex-wrap:wrap;}
+.ecol{width:32px;height:32px;border-radius:50%;cursor:pointer;border:2.5px solid transparent;transition:all .2s;flex-shrink:0;}
+.ecol.picked{transform:scale(1.2);border-color:var(--espresso);}
+.energy-hint{font-size:10px;color:var(--taupe);margin-top:4px;}
+
+/* LIVE WHEEL */
+.live-wheel-wrap{position:sticky;top:16px;text-align:center;margin-bottom:1rem;}
+.live-lbl{font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+canvas{max-width:100%;display:block;margin:0 auto;}
+
+.two-col{display:grid;grid-template-columns:280px 1fr;gap:1.5rem;align-items:start;}
+
+/* STEP 3 RESULTS */
+.res-header{text-align:center;margin-bottom:1.5rem;}
+.res-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:300;color:var(--espresso);margin-bottom:4px;}
+.res-sub{font-size:12px;color:var(--muted);}
+.res-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;align-items:start;}
+.insight-card{background:#fff;border:.5px solid var(--warm);border-radius:4px;padding:12px 14px;margin-bottom:8px;}
+.insight-card.hl{border-color:var(--gold);background:#FDF8EF;}
+.ins-lbl{font-size:9px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.insight-card.hl .ins-lbl{color:var(--gold);}
+.ins-val{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:3px;}
+.ins-desc{font-size:11px;color:var(--muted);line-height:1.5;}
+.bars-wrap{margin-bottom:1.5rem;}
+.bar-row{display:grid;grid-template-columns:120px 1fr 50px;gap:8px;align-items:center;margin-bottom:7px;}
+.bar-lbl{font-size:11px;color:var(--ink);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.bar-track{background:var(--warm);border-radius:2px;height:7px;overflow:hidden;position:relative;}
+.bar-meta{height:100%;border-radius:2px;background:var(--purple);opacity:.5;position:absolute;top:0;left:0;}
+.bar-actual{height:100%;border-radius:2px;background:var(--rose);position:absolute;top:0;left:0;}
+.bar-nums{font-size:10px;color:var(--muted);}
+.bar-nums span{color:var(--purple);} .bar-nums b{color:var(--rose);}
+.legend-row{display:flex;gap:16px;margin-bottom:1rem;}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);}
+.leg-dot{width:10px;height:10px;border-radius:2px;}
+
+.discoveries{background:var(--espresso);border-radius:4px;padding:1.4rem;margin-bottom:1.5rem;}
+.disc-title{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:300;color:var(--cream);margin-bottom:.8rem;font-style:italic;}
+.disc-item{display:flex;gap:8px;align-items:flex-start;padding:5px 0;}
+.ddot{width:4px;height:4px;border-radius:50%;background:var(--gold);margin-top:7px;flex-shrink:0;}
+.dtext{font-size:12px;color:rgba(247,242,234,.8);line-height:1.6;}
+
+.q-block{background:#fff;border:1px solid var(--warm);border-radius:4px;padding:1.4rem;margin-bottom:1.5rem;text-align:center;}
+.q-block p{font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;font-weight:300;color:var(--deep);line-height:1.5;}
+
+.cta-box{background:var(--warm);border-radius:4px;padding:1.4rem;text-align:center;}
+.cta-txt{font-size:12px;color:var(--muted);margin-bottom:6px;line-height:1.6;}
+.cta-brand{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:400;color:var(--espresso);margin-bottom:3px;}
+.cta-handle{font-size:11px;color:var(--muted);}
+
+/* BUTTONS */
+.btn{display:inline-block;padding:11px 24px;border-radius:2px;font-family:'Outfit',sans-serif;font-size:12px;font-weight:500;cursor:pointer;border:none;transition:all .2s;letter-spacing:.04em;}
+.btn-p{background:var(--espresso);color:var(--cream);}
+.btn-p:hover{opacity:.85;}
+.btn-s{background:transparent;color:var(--espresso);border:1px solid var(--espresso);}
+.btn-s:hover{background:var(--espresso);color:var(--cream);}
+.btn-g{background:var(--gold);color:#fff;}
+.btn-g:hover{opacity:.85;}
+.btn-row{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:1.5rem;}
+
+@media(max-width:640px){
+  .two-col{grid-template-columns:1fr;}
+  .res-grid{grid-template-columns:1fr;}
+  .bar-row{grid-template-columns:90px 1fr 40px;}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-orn"></div>
+  <div class="hero-brand">Pienezza Studio · Herramienta de Coaching</div>
+  <div class="hero-title">La <em>Rueda</em><br>de la Vida</div>
+  <div class="hero-sub">Una herramienta para ver con claridad dónde estás hoy, dónde quieres llegar y qué te mueve a actuar.</div>
+  <div class="hero-rule">"La claridad no llega cuando la buscas. Llega cuando te detienes."</div>
+</div>
+
+<div class="intro-wrap">
+  <div class="sec-label">Antes de empezar · Lee esto</div>
+  <div class="rules-grid">
+    <div class="rule-card"><div class="rule-n">01</div><div class="rule-t">No prediseñes el resultado. Deja que las respuestas lleguen con honestidad.</div></div>
+    <div class="rule-card"><div class="rule-n">02</div><div class="rule-t">Son áreas de vida, no proyectos. Énfasis en lo que importa, esté bien o mal.</div></div>
+    <div class="rule-card"><div class="rule-n">03</div><div class="rule-t">Ponerte 10 en todo es irreal. No idealices. Sé honesta contigo misma.</div></div>
+    <div class="rule-card"><div class="rule-n">04</div><div class="rule-t">No tienes que llenarlo todo. Trabaja solo las áreas que te resuenan hoy.</div></div>
+  </div>
+  <div class="warn-box"><strong>Tres capas por área:</strong> primero dónde te gustaría estar (meta), luego dónde estás hoy (realidad) y finalmente qué tanto te mueve trabajar en esa área (energía). La brecha entre meta y realidad es tu mapa de acción.</div>
+</div>
+
+<div class="app">
+
+  <div class="steps">
+    <div class="step"><div class="sdot active" id="d1">1</div><div class="slbl active" id="l1">Elige áreas</div></div>
+    <div class="sline"></div>
+    <div class="step"><div class="sdot pending" id="d2">2</div><div class="slbl" id="l2">Meta · Realidad · Energía</div></div>
+    <div class="sline"></div>
+    <div class="step"><div class="sdot pending" id="d3">3</div><div class="slbl" id="l3">Tu rueda</div></div>
+  </div>
+
+  <!-- PANEL 1 -->
+  <div class="panel active" id="p1">
+    <div class="intro-txt">Elige las áreas que quieres incluir.<br>Selecciona entre 6 y 10.</div>
+    <div class="count-note">Seleccionadas: <span id="cnt">0</span> / 10</div>
+    <div class="areas-grid" id="aGrid"></div>
+    <div class="custom-row">
+      <input class="cinput" id="cIn" placeholder="Agrega un área personalizada (ej. Iglesia, Hobbies...)" maxlength="28">
+      <button class="cbtn" onclick="addCustom()">+ Agregar</button>
+    </div>
+    <div class="btn-row"><button class="btn btn-p" id="btn1" onclick="toStep2()" disabled>Continuar →</button></div>
+  </div>
+
+  <!-- PANEL 2 -->
+  <div class="panel" id="p2">
+    <div class="rating-intro">Para cada área responde tres preguntas.<br>La rueda se actualiza en tiempo real.</div>
+    <div class="two-col">
+      <div class="live-wheel-wrap">
+        <div class="live-lbl">Tu rueda en vivo</div>
+        <canvas id="liveCanvas" width="280" height="280"></canvas>
+      </div>
+      <div id="rList"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-s" onclick="toStep1()">← Volver</button>
+      <button class="btn btn-p" onclick="toStep3()">Ver resultados →</button>
+    </div>
+  </div>
+
+  <!-- PANEL 3 -->
+  <div class="panel" id="p3">
+    <div class="res-header">
+      <div class="res-title">Tu Rueda de la Vida</div>
+      <div class="res-sub">Esto es lo que revela hoy</div>
+    </div>
+    <div class="res-grid">
+      <div><canvas id="resCanvas" width="340" height="340" style="max-width:100%;"></canvas></div>
+      <div id="iList"></div>
+    </div>
+    <div class="legend-row">
+      <div class="leg-item"><div class="leg-dot" style="background:var(--purple);opacity:.5;"></div>Meta ideal</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--rose);"></div>Realidad hoy</div>
+    </div>
+    <div class="bars-wrap" id="bList"></div>
+    <div class="discoveries">
+      <div class="disc-title">¿Qué descubriste?</div>
+      <div id="discList"></div>
+    </div>
+    <div class="q-block"><p id="qText">"¿En cuál de estas áreas quisieras enfocar tu energía hoy?"</p></div>
+    <div class="cta-box">
+      <div class="cta-txt">Esta herramienta es parte del Método Pienezza.<br>Si algo de lo que viste te movió, te acompaño a trabajarlo.</div>
+      <div class="cta-brand">Pienezza Studio</div>
+      <div class="cta-handle">@pienezza.gt · Comunicación &amp; Coaching</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-s" onclick="toStep2()">← Ajustar</button>
+      <button class="btn btn-g" onclick="resetAll()">Empezar de nuevo</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const DEFAULTS = ['Profesional','Salud física','Finanzas','Desarrollo personal','Viajes','Relaciones','Salud emocional','Familia','Ocio y hobbies','Espiritualidad'];
+const ENERGY_COLORS = [
+  {hex:'#E74C3C',name:'Muy alta energía'},
+  {hex:'#E67E22',name:'Alta energía'},
+  {hex:'#F1C40F',name:'Energía media'},
+  {hex:'#2ECC71',name:'Energía positiva'},
+  {hex:'#3498DB',name:'Energía tranquila'},
+  {hex:'#9B59B6',name:'Energía profunda'},
+  {hex:'#95A5A6',name:'Energía baja'},
+];
+
+let sel = [], custom = [], ratings = {};
+
+function init(){
+  const g = document.getElementById('aGrid'); g.innerHTML='';
+  DEFAULTS.forEach(a=>g.appendChild(makeItem(a)));
+  custom.forEach(a=>g.appendChild(makeItem(a)));
+  updateCnt();
+}
+
+function makeItem(a){
+  const d=document.createElement('div');
+  d.className='area-item'+(sel.includes(a)?' sel':'');
+  d.dataset.a=a;
+  d.innerHTML=`<div class="acheck">${sel.includes(a)?'✓':''}</div><div class="aname">${a}</div>`;
+  d.onclick=()=>toggleA(a,d);
+  return d;
+}
+
+function toggleA(a,el){
+  if(sel.includes(a)){sel=sel.filter(x=>x!==a);el.classList.remove('sel');el.querySelector('.acheck').textContent='';}
+  else{if(sel.length>=10)return;sel.push(a);el.classList.add('sel');el.querySelector('.acheck').textContent='✓';}
+  updateCnt();
+}
+
+function updateCnt(){
+  const n=sel.length;
+  document.getElementById('cnt').textContent=n;
+  document.getElementById('btn1').disabled=n<6;
+}
+
+function addCustom(){
+  const v=document.getElementById('cIn').value.trim();
+  if(!v||custom.includes(v)||DEFAULTS.includes(v))return;
+  custom.push(v);
+  document.getElementById('aGrid').appendChild(makeItem(v));
+  document.getElementById('cIn').value='';
+}
+
+function toStep1(){setStep(1);}
+
+function toStep2(){
+  if(sel.length<6)return;
+  sel.forEach(a=>{if(!ratings[a])ratings[a]={meta:7,actual:5,energy:null};});
+  buildRatingsList();
+  drawLive();
+  setStep(2);
+}
+
+function s(a){return a.replace(/[^a-zA-Z0-9]/g,'_');}
+
+function buildRatingsList(){
+  const list=document.getElementById('rList'); list.innerHTML='';
+  sel.forEach(a=>{
+    const r=ratings[a];
+    const card=document.createElement('div');
+    card.className='area-rating-card';
+    const eButtons=ENERGY_COLORS.map((c,i)=>
+      `<div class="ecol${r.energy===i?' picked':''}" style="background:${c.hex};" title="${c.name}" onclick="setEnergy('${a}',${i},this)"></div>`
+    ).join('');
+    card.innerHTML=`
+      <div class="arc-title">${a}</div>
+      <div class="slider-row">
+        <div class="slider-label">
+          <span class="slider-name">🎯 Meta ideal</span>
+          <span class="slider-val" id="mv_${s(a)}">${r.meta}</span>
+        </div>
+        <input type="range" class="meta-slider" min="1" max="10" value="${r.meta}" style="--v:${(r.meta-1)/9*100}%"
+          oninput="upMeta('${a}',this)">
+        <div class="slider-hint">¿En qué punto te gustaría estar? (1 = nada satisfecha · 10 = completamente plena)</div>
+      </div>
+      <div class="slider-row">
+        <div class="slider-label">
+          <span class="slider-name">📍 Realidad hoy</span>
+          <span class="slider-val actual" id="av_${s(a)}">${r.actual}</span>
+        </div>
+        <input type="range" class="actual-slider" min="1" max="10" value="${r.actual}" style="--v:${(r.actual-1)/9*100}%"
+          oninput="upActual('${a}',this)">
+        <div class="slider-hint">¿Dónde estás hoy en esta área? Sé honesta.</div>
+      </div>
+      <div class="energy-row">
+        <div class="energy-label-row">
+          <span class="energy-title">⚡ Energía para trabajarla</span>
+          <span class="energy-chosen" id="en_${s(a)}">${r.energy!==null?ENERGY_COLORS[r.energy].name:'Elige un color'}</span>
+        </div>
+        <div class="energy-colors">${eButtons}</div>
+        <div class="energy-hint">¿Cuánto te mueve, ilusiona o motiva trabajar en esta área?</div>
+      </div>
+    `;
+    list.appendChild(card);
+  });
+}
+
+function upMeta(a,sl){
+  const v=parseInt(sl.value);
+  ratings[a].meta=v;
+  sl.style.setProperty('--v',(v-1)/9*100+'%');
+  document.getElementById('mv_'+s(a)).textContent=v;
+  drawLive();
+}
+
+function upActual(a,sl){
+  const v=parseInt(sl.value);
+  ratings[a].actual=v;
+  sl.style.setProperty('--v',(v-1)/9*100+'%');
+  document.getElementById('av_'+s(a)).textContent=v;
+  drawLive();
+}
+
+function setEnergy(a,i,el){
+  ratings[a].energy=i;
+  // update buttons
+  const card=el.closest('.area-rating-card');
+  card.querySelectorAll('.ecol').forEach((b,bi)=>b.classList.toggle('picked',bi===i));
+  document.getElementById('en_'+s(a)).textContent=ENERGY_COLORS[i].name;
+  drawLive();
+}
+
+function drawLive(){drawWheel('liveCanvas',false,280);}
+
+function drawWheel(id,detailed,size){
+  const canvas=document.getElementById(id);
+  if(!canvas||sel.length===0)return;
+  const ctx=canvas.getContext('2d');
+  const W=size||340, H=size||340;
+  canvas.width=W; canvas.height=H;
+  const cx=W/2, cy=H/2;
+  const maxR=Math.min(W,H)/2-(detailed?44:32);
+  const n=sel.length;
+  const aStep=(Math.PI*2)/n;
+  const start=-Math.PI/2;
+  ctx.clearRect(0,0,W,H);
+
+  // rings
+  for(let i=10;i>=1;i--){
+    ctx.beginPath();ctx.arc(cx,cy,maxR*i/10,0,Math.PI*2);
+    ctx.strokeStyle=i%2===0?'rgba(200,184,158,.3)':'rgba(200,184,158,.15)';
+    ctx.lineWidth=.5;ctx.stroke();
+  }
+  // dividers
+  for(let i=0;i<n;i++){
+    const ang=start+i*aStep;
+    ctx.beginPath();ctx.moveTo(cx,cy);
+    ctx.lineTo(cx+Math.cos(ang)*maxR,cy+Math.sin(ang)*maxR);
+    ctx.strokeStyle='rgba(200,184,158,.4)';ctx.lineWidth=.5;ctx.stroke();
+  }
+
+  // META polygon
+  ctx.beginPath();
+  sel.forEach((a,i)=>{
+    const v=ratings[a]?ratings[a].meta:5;
+    const r=maxR*v/10;
+    const ang=start+i*aStep;
+    const x=cx+Math.cos(ang)*r, y=cy+Math.sin(ang)*r;
+    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  });
+  ctx.closePath();
+  ctx.fillStyle='rgba(139,125,216,.15)';ctx.fill();
+  ctx.strokeStyle='rgba(139,125,216,.5)';ctx.lineWidth=1.5;ctx.stroke();
+
+  // ACTUAL polygon — colored by energy
+  ctx.beginPath();
+  sel.forEach((a,i)=>{
+    const v=ratings[a]?ratings[a].actual:5;
+    const r=maxR*v/10;
+    const ang=start+i*aStep;
+    const x=cx+Math.cos(ang)*r, y=cy+Math.sin(ang)*r;
+    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  });
+  ctx.closePath();
+  // fill each segment with energy color
+  sel.forEach((a,i)=>{
+    const r=ratings[a];
+    if(!r)return;
+    const eColor=r.energy!==null?ENERGY_COLORS[r.energy].hex+'55':'rgba(201,122,110,.25)';
+    const ang1=start+i*aStep, ang2=start+(i+1)*aStep;
+    const vActual=maxR*r.actual/10;
+    ctx.beginPath();
+    ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,vActual,ang1,ang2);
+    ctx.closePath();
+    ctx.fillStyle=eColor;
+    ctx.fill();
+  });
+  ctx.beginPath();
+  sel.forEach((a,i)=>{
+    const v=ratings[a]?ratings[a].actual:5;
+    const r=maxR*v/10;
+    const ang=start+i*aStep;
+    const x=cx+Math.cos(ang)*r, y=cy+Math.sin(ang)*r;
+    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  });
+  ctx.closePath();
+  ctx.strokeStyle='rgba(201,122,110,.8)';ctx.lineWidth=2;ctx.stroke();
+
+  // dots
+  sel.forEach((a,i)=>{
+    const r2=ratings[a]?ratings[a].actual:5;
+    const ang=start+i*aStep;
+    const x=cx+Math.cos(ang)*maxR*r2/10, y=cy+Math.sin(ang)*maxR*r2/10;
+    ctx.beginPath();ctx.arc(x,y,3.5,0,Math.PI*2);
+    ctx.fillStyle='#3D2414';ctx.fill();
+  });
+
+  // labels
+  const fontSize=detailed?11:10;
+  ctx.font=`500 ${fontSize}px Outfit,sans-serif`;
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  sel.forEach((a,i)=>{
+    const ang=start+i*aStep;
+    const lR=maxR+(detailed?26:20);
+    const x=cx+Math.cos(ang)*lR, y=cy+Math.sin(ang)*lR;
+    ctx.fillStyle='#3D2414';
+    const short=a.length>11?a.substring(0,10)+'…':a;
+    ctx.fillText(short,x,y);
+  });
+
+  ctx.beginPath();ctx.arc(cx,cy,3,0,Math.PI*2);
+  ctx.fillStyle='rgba(200,184,158,.7)';ctx.fill();
+}
+
+function toStep3(){
+  buildResults();
+  setStep(3);
+}
+
+function buildResults(){
+  drawWheel('resCanvas',true,340);
+  buildInsights();
+  buildBars();
+  buildDiscoveries();
+}
+
+function buildInsights(){
+  const list=document.getElementById('iList'); list.innerHTML='';
+  const sorted=[...sel].sort((a,b)=>ratings[b].meta-ratings[a].meta);
+  const biggest=[...sel].sort((a,b)=>(ratings[b].meta-ratings[b].actual)-(ratings[a].meta-ratings[a].actual));
+  const avgMeta=(sel.reduce((s,a)=>s+ratings[a].meta,0)/sel.length).toFixed(1);
+  const avgActual=(sel.reduce((s,a)=>s+ratings[a].actual,0)/sel.length).toFixed(1);
+  const highEnergy=sel.filter(a=>ratings[a].energy!==null).sort((a,b)=>ratings[a].energy-ratings[b].energy);
+
+  const cards=[
+    {lbl:'Mayor brecha a trabajar',val:biggest[0],desc:`Aquí la diferencia entre tu meta y realidad es mayor. Es tu mayor oportunidad de crecimiento.`,hl:true},
+    {lbl:'Área más alineada',val:sorted[0],desc:`Tu aspiración más alta. Donde más quieres crecer o donde ya te sientes bien encaminada.`,hl:false},
+    {lbl:'Promedio · Meta vs Realidad',val:`${avgActual} → ${avgMeta}`,desc:`La brecha promedio entre donde estás y donde quieres llegar es ${(parseFloat(avgMeta)-parseFloat(avgActual)).toFixed(1)} puntos.`,hl:false},
+    highEnergy.length>0?{lbl:'Mayor energía',val:highEnergy[0],desc:`Donde más te mueve actuar. Es tu palanca natural — empieza por aquí.`,hl:false}:null
+  ].filter(Boolean);
+
+  cards.forEach(c=>{
+    const div=document.createElement('div');
+    div.className='insight-card'+(c.hl?' hl':'');
+    div.innerHTML=`<div class="ins-lbl">${c.lbl}</div><div class="ins-val">${c.val}</div><div class="ins-desc">${c.desc}</div>`;
+    list.appendChild(div);
+  });
+}
+
+function buildBars(){
+  const wrap=document.getElementById('bList'); wrap.innerHTML='';
+  const title=document.createElement('div');
+  title.className='sec-label'; title.style.marginBottom='12px';
+  title.textContent='Meta vs Realidad por área';
+  wrap.appendChild(title);
+  const sorted=[...sel].sort((a,b)=>ratings[b].meta-ratings[a].meta);
+  sorted.forEach(a=>{
+    const r=ratings[a];
+    const row=document.createElement('div');
+    row.className='bar-row';
+    const mPct=r.meta/10*100, aPct=r.actual/10*100;
+    const eColor=r.energy!==null?ENERGY_COLORS[r.energy].hex:'var(--rose)';
+    row.innerHTML=`
+      <div class="bar-lbl">${a}</div>
+      <div class="bar-track" style="height:10px;">
+        <div class="bar-meta" style="width:${mPct}%;"></div>
+        <div class="bar-actual" style="width:${aPct}%;background:${eColor};"></div>
+      </div>
+      <div class="bar-nums"><span>${r.meta}</span> / <b>${r.actual}</b></div>
+    `;
+    wrap.appendChild(row);
+  });
+}
+
+function buildDiscoveries(){
+  const list=document.getElementById('discList'); list.innerHTML='';
+  const biggest=[...sel].sort((a,b)=>(ratings[b].meta-ratings[b].actual)-(ratings[a].meta-ratings[a].actual))[0];
+  const highE=sel.filter(a=>ratings[a].energy!==null).sort((a,b)=>ratings[a].energy-ratings[b].energy)[0];
+  const items=[
+    `Qué es importante para ti en este momento: las áreas que elegiste lo dicen todo.`,
+    `La mayor brecha entre tu meta y tu realidad está en <strong>${biggest}</strong>. Ahí hay una oportunidad poderosa.`,
+    highE?`El área que más energía te genera es <strong>${highE}</strong>. Es tu palanca natural para empezar.`:`Definir tu nivel de energía por área te dará más claridad sobre por dónde empezar.`,
+    `La claridad que acabas de generar es el primer paso del método Pienezza: conocerte antes de proyectarte.`
+  ];
+  items.forEach(t=>{
+    const d=document.createElement('div');
+    d.className='disc-item';
+    d.innerHTML=`<div class="ddot"></div><div class="dtext">${t}</div>`;
+    list.appendChild(d);
+  });
+  document.getElementById('qText').textContent=`"¿En cuál de estas ${sel.length} áreas quisieras enfocar tu energía esta semana?"`;
+}
+
+function setStep(n){
+  [1,2,3].forEach(i=>{
+    document.getElementById('p'+i).classList.toggle('active',i===n);
+    const dot=document.getElementById('d'+i), lbl=document.getElementById('l'+i);
+    dot.classList.remove('active','done','pending');
+    lbl.classList.remove('active');
+    if(i<n){dot.classList.add('done');dot.textContent='✓';}
+    else if(i===n){dot.classList.add('active');dot.textContent=i;lbl.classList.add('active');}
+    else{dot.classList.add('pending');dot.textContent=i;}
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function resetAll(){sel=[];custom=[];ratings={};init();setStep(1);}
+init();
+</script>
+</body>
+</html>
